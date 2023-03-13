@@ -11,7 +11,7 @@ const TrendingSection = () => {
   useEffect(() => {
     try {
       axios
-        .get(`https://watchapi.whatever.social/trending?region=IN`)
+        .get(`https://pipedapi.kavin.rocks/trending?region=IN`)
         .then((res) => {
           console.log(res.data);
           setTrending(res.data); //storing response in trending variable/state
@@ -34,6 +34,30 @@ const TrendingSection = () => {
     }
   }
 
+  function handleUploadTimeFormat(response) {
+    // Regular expression to extract number of hours or days
+    const timeRegex = /(\d+) (hours|days|day) ago/;
+    const timeMatch = response.match(timeRegex);
+
+    if (timeMatch) {
+      // Extracted number of time units (hours or days)
+      const time = parseInt(timeMatch[1]);
+
+      // Convert time to "some x H/D ago" format
+      const timeUnit = timeMatch[2];
+      let timeAgo;
+
+      if (timeUnit === "hours") {
+        timeAgo = `${time}h ago`; 
+      } else if (timeUnit === "days" || timeUnit === "day") {
+        timeAgo = `${time}d ago`;
+      }
+
+      return timeAgo;
+    }
+
+  }
+
   return (
     <>
       {/* Main Component  */}
@@ -50,7 +74,7 @@ const TrendingSection = () => {
                 <Zoom>
                   <div
                     className="w-full bg-white rounded-lg border-2 border-gray-300 shadow-md"
-                    key={val.url}
+                    key={`val-${index}`}
                   >
                     <a
                       href={"https://youtube.com" + val.url}
@@ -95,7 +119,7 @@ const TrendingSection = () => {
                             </p>{" "}
                             &nbsp; &#183; &nbsp;
                             <p className="text-gray-600 text-sm">
-                              {val.uploadedDate}
+                              {handleUploadTimeFormat(val.uploadedDate)}
                             </p>
                           </div>
                         </div>

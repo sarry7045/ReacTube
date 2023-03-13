@@ -10,6 +10,8 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextPage, setNextPage] = useState(1);
 
   // funtion to fetch search suggestion on realtime user input
   function handleSearchQueryChange(event) {
@@ -24,7 +26,7 @@ const Navbar = () => {
       // Call API for Search Suggestions
       axios
         .get(
-          `https://watchapi.whatever.social/suggestions?query=${event.target.value}`
+          `https://pipedapi.kavin.rocks/suggestions?query=${event.target.value}`
         )
         .then((res) => {
           console.log(res.data);
@@ -43,12 +45,34 @@ const Navbar = () => {
       // call API or perform search here
       axios
         .get(
-          `https://watchapi.whatever.social/search?q=${searchQuery}&filter=all`
+          `https://pipedapi.kavin.rocks/search?q=${searchQuery}&filter=videos&filter=music_songs&filter=music_videos`
         )
         .then((res) => {
-          console.log(res.data.items);
+          console.log(res.data);
 
           setSearchResults(res.data.items);
+          setNextPage(res.data.nextpage);
+        });
+    } catch (error) {
+      console.log({ error });
+    }
+  }
+
+  // Load More Results
+  function handleLoadMore(event) {
+    event.preventDefault();
+
+    try {
+      // call API or perform search here
+      axios
+        .get(
+          `https://pipedapi.kavin.rocks/nextpage/search?nextpage=${encodeURIComponent(nextPage)}&q=${encodeURIComponent(searchQuery)}&filter=videos&filter=music_songs&filter=music_videos`
+        )
+        .then((res) => {
+          // console.log(res.data.items);
+          setSearchResults([...searchResults, ...res.data.items]);
+          console.log(searchResults);
+          setCurrentPage(currentPage + 1);
         });
     } catch (error) {
       console.log({ error });
@@ -59,6 +83,8 @@ const Navbar = () => {
   const handleSuggestionClick = (suggestion) => {
     setSearchQuery(suggestion);
     setSearchSuggestions([]);
+    handleSearchSubmit({preventDefault: () => {}, target: {}})
+    // above line simulate a click event on a button or a submit event on a form, which would normally trigger the handleSearchSubmit() function.
   };
 
   return (
@@ -72,7 +98,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex-shrink-0 flex items-center">
-              <div className="sm:flex hidden">
+              <div className="sm:flex hidden cursor-pointer">
                 <img
                   src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fclipartcraft.com%2Fimages%2Fyoutube-logo-transparent-blue-8.png&f=1&nofb=1&ipt=eae431eda7786f8d40ebc5da39d41a483219ecbe25f98e6a82a342ff21f6afc2&ipo=images"
                   alt="Logo"
@@ -106,7 +132,7 @@ const Navbar = () => {
               <div className="absolute mt-2 w-full bg-white rounded-lg shadow-lg z-10 top-10">
                 {searchSuggestions.map((suggestion, index) => (
                   <div
-                    key={index}
+                    key={`suggestion-${index}`}
                     className="p-2 cursor-pointer hover:bg-gray-100"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
@@ -119,52 +145,61 @@ const Navbar = () => {
             {/* Results Modal */}
 
             {searchResults.length > 0 && (
-            <div className="fixed z-50 inset-0 overflow-y-auto">
-              <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div className="fixed inset-0 transition-opacity">
-                  <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <div className="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle sm:max-w-lg max-w-3xl">
-                  <button
-                    className="absolute top-0 right-0 m-4 font-bold text-xl"
-                    onClick={() => setSearchResults([])}
-                  >
-                    X
-                  </button>
-                  <h2 className="text-2xl font-bold mb-4">Search Results</h2>
-                  <ul className="max-h-60vh overflow-y-auto">
-                    {searchResults.map((result) => (
-                      <li key={result.id} className="mb-2">
-                        <div className="flex items-center space-x-4">
-                          {result.thumbnail && (
-                            <div className="flex-shrink-0 w-3/12">
-                              <img
-                                src={result.thumbnail}
-                                alt="Thumbnail"
-                                className="w-full h-auto object-cover rounded"
-                              />
+              <div className="fixed z-50 inset-0 overflow-y-auto">
+                <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                  <div className="fixed inset-0 transition-opacity">
+                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                  </div>
+                  <div className="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle sm:max-w-lg max-w-3xl">
+                    <button
+                      className="absolute top-0 right-0 m-4 font-bold text-xl"
+                      onClick={() => {
+                        setSearchResults([]);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      X
+                    </button>
+                    <h2 className="text-2xl font-bold mb-4">Search Results</h2>
+                    <ul className="max-h-60vh overflow-y-auto">
+                      {searchResults.map((result, index) => (
+                        <li key={`result-${index}`} className="mb-2">
+                          <div className="flex items-center space-x-4">
+                            {result.thumbnail && (
+                              <div className="flex-shrink-0 w-3/12">
+                                <img
+                                  src={result.thumbnail}
+                                  alt="Thumbnail"
+                                  className="w-full h-auto object-cover rounded"
+                                />
+                              </div>
+                            )}
+                            <div className="flex-grow w-9/12">
+                              <a
+                                title="Title"
+                                href={"https://youtube.com" + result.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-m font-small text-blue-600 hover:underline"
+                              >
+                                {result.title}
+                              </a>
                             </div>
-                          )}
-                          <div className="flex-grow w-9/12">
-                                    <a
-                                        title="Title"
-                              href={"https://youtube.com" + result.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-m font-small text-blue-600 hover:underline"
-                            >
-                              {result.title}
-                            </a>
                           </div>
-                        </div>
-                        <hr className="my-2 border-gray-300" />
-                      </li>
-                    ))}
-                  </ul>
+                          <hr className="my-2 border-gray-300" />
+                        </li>
+                      ))}
+                    </ul>
+                    <button
+                      className="w-full py-2 text-white bg-blue-500 rounded mt-4 hover:bg-blue-700"
+                      onClick={handleLoadMore}
+                    >
+                      Load More
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-                  )}
+            )}
             {/* {searchResults?.length > 0 ? (
               <Modaal
                 searchResults={searchResults}
