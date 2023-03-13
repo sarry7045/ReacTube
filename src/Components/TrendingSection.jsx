@@ -2,9 +2,31 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Zoom from "react-reveal";
+import VideoModal from "./VideoModal.jsx";
 
 const TrendingSection = () => {
   const [trending, setTrending] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [videoID, setVideoID] = useState(null);
+
+  // function to handle the click event
+  const handleVideoClick = (ID) => {
+
+    try {
+      axios
+        .get(`https://pipedapi.kavin.rocks/streams/${ID}`)
+        .then((videoclickresponse) => {
+          console.log(videoclickresponse.data.hls);
+          setVideoID(videoclickresponse.data.hls);
+          //storing response in trending variable/state
+        });
+    } catch (error) {
+      console.log({ error });
+    }
+
+
+    setShowModal(true);
+  };
 
   // get api data on every reload only
   // api = 2d50d4fed70d41aebc7baa7acf8f2a0e
@@ -48,7 +70,7 @@ const TrendingSection = () => {
       let timeAgo;
 
       if (timeUnit === "hours") {
-        timeAgo = `${time}h ago`; 
+        timeAgo = `${time}h ago`;
       } else if (timeUnit === "days" || timeUnit === "day") {
         timeAgo = `${time}d ago`;
       }
@@ -67,8 +89,13 @@ const TrendingSection = () => {
         transition={{ delay: 0.1, duration: 0.9 }}
         className="container mx-auto my-5"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center relative ${showModal ? 'opacity-50 blur-sm' : ''}`}>
+
           {trending.map((val, index) => {
+
+            const videoId = val.url && val.url.split("v=").pop();
+
+
             return (
               <>
                 <Zoom>
@@ -77,20 +104,24 @@ const TrendingSection = () => {
                     key={`val-${index}`}
                   >
                     <a
-                      href={"https://youtube.com" + val.url}
+                      // href={"https://youtube.com" + val.ID}
                       className="h-48 w-full object-cover object-center rounded-t-lg"
+                    // onClick={() => { handleVideoClick(videoId) }}
+
                     >
                       <img
                         src={val.thumbnail}
                         alt="img"
                         className="h-48 w-full object-cover object-center rounded-t-lg"
+                        onClick={() => { handleVideoClick(videoId) }}
                       />
                     </a>
 
                     <div className="px-6 py-1">
                       <a
-                        href={"https://youtube.com" + val.url}
+                        // href={"https://youtube.com" + val.ID}
                         className="font-bold mb-2"
+                        onClick={() => { handleVideoClick(videoId) }}
                       >
                         {val.title}- #{index + 1}
                       </a>
@@ -98,7 +129,7 @@ const TrendingSection = () => {
                       <br />
 
                       <div className="flex items-center mb-2">
-                        <a href={"https://youtube.com" + val.uploaderUrl}>
+                        <a href={"https://youtube.com" + val.uploaderID}>
                           {" "}
                           <img
                             className="w-10 h-10 rounded-full mr-4"
@@ -108,7 +139,7 @@ const TrendingSection = () => {
                         </a>
                         <div className="text-sm">
                           <a
-                            href={"https://youtube.com" + val.uploaderUrl}
+                            href={"https://youtube.com" + val.uploaderID}
                             className="text-gray-900 font-semibold leading-none"
                           >
                             {val.uploaderName}
@@ -126,12 +157,30 @@ const TrendingSection = () => {
                       </div>
                     </div>
                   </div>
+
+
+
                 </Zoom>
+
+
               </>
             );
+
+
           })}
+
+
+
+
         </div>
       </motion.div>
+
+          {/* video modal component */}
+      {showModal && (
+        <VideoModal showModal={showModal} setShowModal={setShowModal} videoID={videoID} />
+      )}
+
+
     </>
   );
 };
