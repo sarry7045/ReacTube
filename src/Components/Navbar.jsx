@@ -15,7 +15,7 @@ const Navbar = () => {
   const [nextPage, setNextPage] = useState(1);
 
   const [showModal, setShowModal] = useState(false);
-  const [videoID, setVideoID] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
 
   // function to handle the click event
   const handleVideoClick = (ID) => {
@@ -25,7 +25,7 @@ const Navbar = () => {
         .get(`https://pipedapi.kavin.rocks/streams/${ID}`)
         .then((videoclickresponse) => {
           console.log(videoclickresponse.data.hls);
-          setVideoID(videoclickresponse.data.hls);
+          setVideoUrl(videoclickresponse.data.hls);
           //storing response in trending variable/state
         });
     } catch (error) {
@@ -122,7 +122,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex-shrink-0 flex items-center">
-              <div className="sm:flex hidden cursor-pointer">
+              <div className="cursor-pointer  sm:flex hidden">
                 <img
                   src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fclipartcraft.com%2Fimages%2Fyoutube-logo-transparent-blue-8.png&f=1&nofb=1&ipt=eae431eda7786f8d40ebc5da39d41a483219ecbe25f98e6a82a342ff21f6afc2&ipo=images"
                   alt="Logo"
@@ -146,12 +146,12 @@ const Navbar = () => {
                   placeholder="Search"
                   className="px-4 py-2 w-full text-gray-900 bg-gray-100 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 />
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300"
-                >
-                  Search
+                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.5 15.5L20 20M10 17a7 7 0 1 1 4.24-12.24 7 7 0 0 1-4.24 12.24z" />
+                  </svg>
                 </button>
+
               </form>
               <div className="absolute mt-2 w-full bg-white rounded-lg shadow-lg z-10 top-10">
                 {searchSuggestions.map((suggestion, index) => (
@@ -188,7 +188,7 @@ const Navbar = () => {
                     <ul className="max-h-60vh overflow-y-auto">
                       {searchResults.map((result, index) => {
 
-                        const videoId = result.url && result.url.split("v=").pop();
+                        const videoUrl = result.url && result.url.split("v=").pop();
 
                         return (
 
@@ -199,8 +199,8 @@ const Navbar = () => {
                                   <img
                                     src={result.thumbnail}
                                     alt="Thumbnail"
-                                    className="w-full h-auto object-cover rounded"
-                                    onClick={() => { handleVideoClick(videoId) }}
+                                    className="w-full h-auto object-cover rounded cursor-pointer"
+                                    onClick={() => { handleVideoClick(videoUrl) }}
                                   />
                                 </div>
                               )}
@@ -208,8 +208,8 @@ const Navbar = () => {
                                 <a
                                   title="Title"
                                   rel="noreferrer"
-                                  className="text-m font-small text-blue-600 hover:underline"
-                                  onClick={() => { handleVideoClick(videoId) }}
+                                  className="cursor-pointer text-m font-small text-blue-600 hover:underline "
+                                  onClick={() => { handleVideoClick(videoUrl) }}
                                 >
                                   {result.title}
                                 </a>
@@ -240,9 +240,9 @@ const Navbar = () => {
         </div>
       </motion.nav>
 
-       {/* video modal component */}
-       {showModal && (
-        <VideoModal showModal={showModal} setShowModal={setShowModal} videoID={videoID} />
+      {/* video modal component */}
+      {showModal && (
+        <VideoModal showModal={showModal} setShowModal={setShowModal} videoUrl={videoUrl} />
       )}
     </>
   );

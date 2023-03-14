@@ -7,7 +7,7 @@ import VideoModal from "./VideoModal.jsx";
 const TrendingSection = () => {
   const [trending, setTrending] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [videoID, setVideoID] = useState(null);
+  const [videoUrl, setVideoUrl] = useState(null);
 
   // function to handle the click event
   const handleVideoClick = (ID) => {
@@ -17,7 +17,7 @@ const TrendingSection = () => {
         .get(`https://pipedapi.kavin.rocks/streams/${ID}`)
         .then((videoclickresponse) => {
           console.log(videoclickresponse.data.hls);
-          setVideoID(videoclickresponse.data.hls);
+          setVideoUrl(videoclickresponse.data.hls);
           //storing response in trending variable/state
         });
     } catch (error) {
@@ -93,7 +93,7 @@ const TrendingSection = () => {
 
           {trending.map((val, index) => {
 
-            const videoId = val.url && val.url.split("v=").pop();
+            const videoUrl = val.url && val.url.split("v=").pop();
 
 
             return (
@@ -105,23 +105,23 @@ const TrendingSection = () => {
                   >
                     <a
                       // href={"https://youtube.com" + val.ID}
-                      className="h-48 w-full object-cover object-center rounded-t-lg"
-                    // onClick={() => { handleVideoClick(videoId) }}
+                      className="h-48 w-full object-cover object-center rounded-t-lg cursor-pointer"
+                    // onClick={() => { handleVideoClick(videoUrl) }}
 
                     >
                       <img
                         src={val.thumbnail}
                         alt="img"
                         className="h-48 w-full object-cover object-center rounded-t-lg"
-                        onClick={() => { handleVideoClick(videoId) }}
+                        onClick={() => { handleVideoClick(videoUrl) }}
                       />
                     </a>
 
                     <div className="px-6 py-1">
                       <a
                         // href={"https://youtube.com" + val.ID}
-                        className="font-bold mb-2"
-                        onClick={() => { handleVideoClick(videoId) }}
+                        className="font-bold mb-2 cursor-pointer"
+                        onClick={() => { handleVideoClick(videoUrl) }}
                       >
                         {val.title}- #{index + 1}
                       </a>
@@ -177,7 +177,7 @@ const TrendingSection = () => {
 
           {/* video modal component */}
       {showModal && (
-        <VideoModal showModal={showModal} setShowModal={setShowModal} videoID={videoID} />
+        <VideoModal showModal={showModal} setShowModal={setShowModal} videoUrl={videoUrl} />
       )}
 
 
