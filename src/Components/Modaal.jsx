@@ -1,6 +1,6 @@
 import React from "react";
 import { Zoom } from "react-reveal";
-const Modaal = ({ setSearchResults, searchResults }) => {
+const Modaal = ({searchResults, setSearchResults  }) => {
   return (
     <>
       <Zoom>

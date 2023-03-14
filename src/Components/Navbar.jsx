@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import "../App.css";
+import VideoModal from "./VideoModal.jsx";
 // import Modaal from "./Modaal";
 
 // https://watchapi.whatever.social/search?q=atifaslam&filter=music_songs
@@ -12,6 +13,29 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(1);
+
+  const [showModal, setShowModal] = useState(false);
+  const [videoID, setVideoID] = useState(null);
+
+  // function to handle the click event
+  const handleVideoClick = (ID) => {
+
+    try {
+      axios
+        .get(`https://pipedapi.kavin.rocks/streams/${ID}`)
+        .then((videoclickresponse) => {
+          console.log(videoclickresponse.data.hls);
+          setVideoID(videoclickresponse.data.hls);
+          //storing response in trending variable/state
+        });
+    } catch (error) {
+      console.log({ error });
+    }
+
+
+    setShowModal(true);
+  };
+
 
   // funtion to fetch search suggestion on realtime user input
   function handleSearchQueryChange(event) {
@@ -83,7 +107,7 @@ const Navbar = () => {
   const handleSuggestionClick = (suggestion) => {
     setSearchQuery(suggestion);
     setSearchSuggestions([]);
-    handleSearchSubmit({preventDefault: () => {}, target: {}})
+    handleSearchSubmit({ preventDefault: () => { }, target: {} })
     // above line simulate a click event on a button or a submit event on a form, which would normally trigger the handleSearchSubmit() function.
   };
 
@@ -162,33 +186,39 @@ const Navbar = () => {
                     </button>
                     <h2 className="text-2xl font-bold mb-4">Search Results</h2>
                     <ul className="max-h-60vh overflow-y-auto">
-                      {searchResults.map((result, index) => (
-                        <li key={`result-${index}`} className="mb-2">
-                          <div className="flex items-center space-x-4">
-                            {result.thumbnail && (
-                              <div className="flex-shrink-0 w-3/12">
-                                <img
-                                  src={result.thumbnail}
-                                  alt="Thumbnail"
-                                  className="w-full h-auto object-cover rounded"
-                                />
+                      {searchResults.map((result, index) => {
+
+                        const videoId = result.url && result.url.split("v=").pop();
+
+                        return (
+
+                          <li key={`result-${index}`} className="mb-2">
+                            <div className="flex items-center space-x-4">
+                              {result.thumbnail && (
+                                <div className="flex-shrink-0 w-3/12">
+                                  <img
+                                    src={result.thumbnail}
+                                    alt="Thumbnail"
+                                    className="w-full h-auto object-cover rounded"
+                                    onClick={() => { handleVideoClick(videoId) }}
+                                  />
+                                </div>
+                              )}
+                              <div className="flex-grow w-9/12">
+                                <a
+                                  title="Title"
+                                  rel="noreferrer"
+                                  className="text-m font-small text-blue-600 hover:underline"
+                                  onClick={() => { handleVideoClick(videoId) }}
+                                >
+                                  {result.title}
+                                </a>
                               </div>
-                            )}
-                            <div className="flex-grow w-9/12">
-                              <a
-                                title="Title"
-                                href={"https://youtube.com" + result.url}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-m font-small text-blue-600 hover:underline"
-                              >
-                                {result.title}
-                              </a>
                             </div>
-                          </div>
-                          <hr className="my-2 border-gray-300" />
-                        </li>
-                      ))}
+                            <hr className="my-2 border-gray-300" />
+                          </li>
+                        )
+                      })}
                     </ul>
                     <button
                       className="w-full py-2 text-white bg-blue-500 rounded mt-4 hover:bg-blue-700"
@@ -209,6 +239,11 @@ const Navbar = () => {
           </div>
         </div>
       </motion.nav>
+
+       {/* video modal component */}
+       {showModal && (
+        <VideoModal showModal={showModal} setShowModal={setShowModal} videoID={videoID} />
+      )}
     </>
   );
 };
