@@ -82,15 +82,17 @@ const TrendingSection = () => {
 
   return (
     <>
+    
       {/* Main Component  */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.9 }}
-        className="container mx-auto my-5"
+        className="container mx-auto my-1"
       >
+        <h1 className="text-3xl font-bold text-gray-800 py-4 px-4">Trendings in India</h1>
         <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center relative ${showModal ? 'opacity-50 blur-sm' : ''}`}>
-
+          
           {trending.map((val, index) => {
 
             const videoUrl = val.url && val.url.split("v=").pop();
