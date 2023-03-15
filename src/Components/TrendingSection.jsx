@@ -123,7 +123,7 @@ const TrendingSection = () => {
                     <div className="px-6 py-1">
                       <a
                         // href={"https://youtube.com" + val.ID}
-                        className="font-bold mb-2 cursor-pointer title"
+                        className="font-medium mb-2 cursor-pointer title"
                         onClick={() => { handleVideoClick(videoUrl) }}
                       >
                         #{index + 1} - {val.title}

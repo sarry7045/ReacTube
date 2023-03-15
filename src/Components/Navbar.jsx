@@ -198,7 +198,7 @@ const Navbar = () => {
                           <li key={`result-${index}`} className="mb-2">
                             <div className="flex items-center space-x-4">
                               {result.thumbnail && (
-                                <div className="flex-shrink-0 w-3/12">
+                                <div className="flex-shrink-0 w-4/12">
                                   <img
                                     src={result.thumbnail}
                                     alt="Thumbnail"
@@ -207,19 +207,32 @@ const Navbar = () => {
                                   />
                                 </div>
                               )}
-                              <div className="flex-grow w-9/12">
+                              <div className="flex-grow w-8/12">
                                 <a
                                   title="Title"
                                   rel="noreferrer"
-                                  className="cursor-pointer text-m font-small text-blue-600 hover:underline "
+                                  className="title cursor-pointer text-base font-semibold text-blue-600 hover:underline text-black !important"
                                   onClick={() => { handleVideoClick(videoUrl) }}
                                 >
                                   {result.title}
                                 </a>
+                                <div className="flex items-center space-x-2 mt-1 text-xs">
+                                  <div className="flex-shrink-0 w-6 h-6">
+                                    <img
+                                      src={result.uploaderAvatar}
+                                      alt="Uploader"
+                                      className="w-full h-auto object-cover rounded-full cursor-pointer"
+                                    />
+                                  </div>
+                                  <span className="text-gray-500">{result.uploaderName}</span>
+                                </div>
                               </div>
                             </div>
+
                             <hr className="my-2 border-gray-300" />
                           </li>
+
+
                         )
                       })}
                     </ul>
