@@ -40,6 +40,16 @@
   text-overflow: ellipsis;
 }
 
+.logo {
+  height: 49px; /* Increase the height as desired */
+}
+
+.custom-text-color {
+  font-size: 28px; /* Increase the font size as desired */
+
+  
+}
+
 
 @media (max-width: 640px) {
   .modal {

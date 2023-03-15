@@ -117,22 +117,23 @@ const Navbar = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.9 }}
-        className="bg-gray-800"
+        className="bg-custom"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-           
-              <div className="cursor-pointer flex-shrink-0 flex items-center">
-                <img
-                  src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fclipartcraft.com%2Fimages%2Fyoutube-logo-transparent-blue-8.png&f=1&nofb=1&ipt=eae431eda7786f8d40ebc5da39d41a483219ecbe25f98e6a82a342ff21f6afc2&ipo=images"
-                  alt="Logo"
-                  className="block h-8 w-auto"
-                />
-                <span className="ml-2 text-white font-bold text-xl sm:flex hidden">
-                  ReacTube
-                </span>
-              </div>
-            
+
+            <div className="cursor-pointer flex-shrink-0 flex items-center mr-2">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/3820/3820291.png"
+                alt="Logo"
+                className="block h-10 w-auto logo" // Add custom class `logo` and increase height
+              />
+              <span className="ml-2 text-white font-bold text-2xl sm:flex hidden custom-text-color">
+                ReacTube
+              </span>
+
+            </div>
+
 
             <div className="relative">
               <form
@@ -146,11 +147,13 @@ const Navbar = () => {
                   placeholder="Search"
                   className="px-4 py-2 w-full text-gray-900 bg-gray-100 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 />
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button type="submit" className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-700 focus:outline-none focus:ring focus:border-purple-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="#fff">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.5 15.5L20 20M10 17a7 7 0 1 1 4.24-12.24 7 7 0 0 1-4.24 12.24z" />
                   </svg>
                 </button>
+
+
 
               </form>
               <div className="absolute mt-2 w-full bg-white rounded-lg shadow-lg z-10 top-10">
@@ -221,7 +224,7 @@ const Navbar = () => {
                       })}
                     </ul>
                     <button
-                      className="w-full py-2 text-white bg-blue-500 rounded mt-4 hover:bg-blue-700"
+                      className="w-full py-2 text-white bg-purple-500 rounded mt-4 hover:bg-purple-700"
                       onClick={handleLoadMore}
                     >
                       Load More
