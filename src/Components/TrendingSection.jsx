@@ -3,6 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import Zoom from "react-reveal";
 import VideoModal from "./VideoModal.jsx";
+import "../App.css";
 
 const TrendingSection = () => {
   const [trending, setTrending] = useState([]);
@@ -82,7 +83,7 @@ const TrendingSection = () => {
 
   return (
     <>
-    
+
       {/* Main Component  */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -92,7 +93,7 @@ const TrendingSection = () => {
       >
         <h1 className="text-3xl font-bold text-gray-800 py-4 px-4">Trendings in India</h1>
         <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center relative ${showModal ? 'opacity-50 blur-sm' : ''}`}>
-          
+
           {trending.map((val, index) => {
 
             const videoUrl = val.url && val.url.split("v=").pop();
@@ -122,16 +123,15 @@ const TrendingSection = () => {
                     <div className="px-6 py-1">
                       <a
                         // href={"https://youtube.com" + val.ID}
-                        className="font-bold mb-2 cursor-pointer"
+                        className="font-bold mb-2 cursor-pointer title"
                         onClick={() => { handleVideoClick(videoUrl) }}
                       >
-                        {val.title}- #{index + 1}
+                        #{index + 1} - {val.title}
                       </a>
-                      <br />
-                      <br />
+                      
 
                       <div className="flex items-center mb-2">
-                        <a href={"https://youtube.com" + val.uploaderID}>
+                        <a href={"https://youtube.com" + val.uploaderUrl}>
                           {" "}
                           <img
                             className="w-10 h-10 rounded-full mr-4"
@@ -141,7 +141,7 @@ const TrendingSection = () => {
                         </a>
                         <div className="text-sm">
                           <a
-                            href={"https://youtube.com" + val.uploaderID}
+                            href={"https://youtube.com" + val.uploaderUrl}
                             className="text-gray-900 font-semibold leading-none"
                           >
                             {val.uploaderName}
@@ -177,7 +177,7 @@ const TrendingSection = () => {
         </div>
       </motion.div>
 
-          {/* video modal component */}
+      {/* video modal component */}
       {showModal && (
         <VideoModal showModal={showModal} setShowModal={setShowModal} videoUrl={videoUrl} />
       )}

@@ -121,18 +121,18 @@ const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <div className="flex-shrink-0 flex items-center">
-              <div className="cursor-pointer  sm:flex hidden">
+           
+              <div className="cursor-pointer flex-shrink-0 flex items-center">
                 <img
                   src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fclipartcraft.com%2Fimages%2Fyoutube-logo-transparent-blue-8.png&f=1&nofb=1&ipt=eae431eda7786f8d40ebc5da39d41a483219ecbe25f98e6a82a342ff21f6afc2&ipo=images"
                   alt="Logo"
                   className="block h-8 w-auto"
                 />
-                <span className="ml-2 text-white font-bold text-xl">
+                <span className="ml-2 text-white font-bold text-xl sm:flex hidden">
                   ReacTube
                 </span>
               </div>
-            </div>
+            
 
             <div className="relative">
               <form
