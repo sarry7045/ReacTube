@@ -9,6 +9,7 @@ const TrendingSection = () => {
   const [trending, setTrending] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
+  const [region, setRegion] = useState("IN");
 
   // function to handle the click event
   const handleVideoClick = (ID) => {
@@ -34,7 +35,7 @@ const TrendingSection = () => {
   useEffect(() => {
     try {
       axios
-        .get(`https://pipedapi.kavin.rocks/trending?region=IN`)
+        .get(`https://pipedapi.kavin.rocks/trending?region=${region}`)
         .then((res) => {
           console.log(res.data);
           setTrending(res.data); //storing response in trending variable/state
@@ -42,7 +43,19 @@ const TrendingSection = () => {
     } catch (error) {
       console.log({ error });
     }
-  }, []);
+  }, [region]);
+
+  // function to handle region selection
+  const handleRegionChange = (event) => {
+    setRegion(event.target.value);
+  };
+
+  // list of countries for dropdown options
+  const countries = [
+    { code: "IN", name: "India" },
+    { code: "US", name: "US" },
+    // add more countries as needed
+  ];
 
   // video views formating
   function formatNumber(number) {
@@ -91,7 +104,16 @@ const TrendingSection = () => {
         transition={{ delay: 0.1, duration: 0.9 }}
         className="container mx-auto my-1"
       >
-        <h1 className="text-3xl font-bold text-gray-800 py-4 px-4">Trendings in India</h1>
+        <h1 className="text-3xl font-bold text-gray-800 py-4 px-4">
+        Trendings in{" "}
+        <select value={region} onChange={handleRegionChange} className="w-40 rounded-lg border bg-white">
+          {countries.map((country) => (
+            <option key={country.code} value={country.code}>
+              {country.name}
+            </option>
+          ))}
+        </select>
+      </h1>
         <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center relative ${showModal ? 'opacity-50 blur-sm' : ''}`}>
 
           {trending.map((val, index) => {
