@@ -3,6 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import Zoom from "react-reveal";
 import VideoModal from "./VideoModal.jsx";
+import LoaderModal from "./LoaderModal.jsx";
 import "../App.css";
 
 const TrendingSection = () => {
@@ -10,9 +11,11 @@ const TrendingSection = () => {
   const [showModal, setShowModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [region, setRegion] = useState("IN");
+  const [isLoading, setIsLoading] = useState(false);
 
   // function to handle the click event
   const handleVideoClick = (ID) => {
+    setIsLoading(true); // set isLoading to true when the video is clicked
 
     try {
       axios
@@ -21,6 +24,7 @@ const TrendingSection = () => {
           console.log(videoclickresponse.data.hls);
           setVideoUrl(videoclickresponse.data.hls);
           //storing response in trending variable/state
+          setIsLoading(false); // set isLoading to false when the video is fetched successfully
         });
     } catch (error) {
       console.log({ error });
@@ -105,21 +109,20 @@ const TrendingSection = () => {
         className="container mx-auto my-1"
       >
         <h1 className="text-3xl font-bold text-gray-800 py-4 px-4">
-        Trendings in{" "}
-        <select value={region} onChange={handleRegionChange} className="w-40 rounded-lg border bg-white">
-          {countries.map((country) => (
-            <option key={country.code} value={country.code}>
-              {country.name}
-            </option>
-          ))}
-        </select>
-      </h1>
+          Trendings in{" "}
+          <select value={region} onChange={handleRegionChange} className="w-40 rounded-lg border bg-white">
+            {countries.map((country) => (
+              <option key={country.code} value={country.code}>
+                {country.name}
+              </option>
+            ))}
+          </select>
+        </h1>
         <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center relative ${showModal ? 'opacity-50 blur-sm' : ''}`}>
 
           {trending.map((val, index) => {
 
             const videoUrl = val.url && val.url.split("v=").pop();
-
 
             return (
               <>
@@ -150,7 +153,6 @@ const TrendingSection = () => {
                       >
                         #{index + 1} - {val.title}
                       </a>
-                      
 
                       <div className="flex items-center mb-2">
                         <a href={"https://youtube.com" + val.uploaderUrl}>
@@ -181,30 +183,21 @@ const TrendingSection = () => {
                       </div>
                     </div>
                   </div>
-
-
-
                 </Zoom>
-
 
               </>
             );
 
-
           })}
-
-
-
 
         </div>
       </motion.div>
-
       {/* video modal component */}
       {showModal && (
         <VideoModal showModal={showModal} setShowModal={setShowModal} videoUrl={videoUrl} />
       )}
-
-
+      {/* Loader modal component */}
+      {isLoading && <LoaderModal />} {/* render the Loader component in a modal */}
     </>
   );
 };

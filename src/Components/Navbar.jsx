@@ -3,6 +3,8 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import "../App.css";
 import VideoModal from "./VideoModal.jsx";
+import LoaderModal from "./LoaderModal";
+
 // import Modaal from "./Modaal";
 
 // https://watchapi.whatever.social/search?q=atifaslam&filter=music_songs
@@ -16,9 +18,11 @@ const Navbar = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   // function to handle the click event
   const handleVideoClick = (ID) => {
+    setIsLoading(true);
 
     try {
       axios
@@ -27,6 +31,7 @@ const Navbar = () => {
           console.log(videoclickresponse.data.hls);
           setVideoUrl(videoclickresponse.data.hls);
           //storing response in trending variable/state
+          setIsLoading(false);
         });
     } catch (error) {
       console.log({ error });
@@ -64,6 +69,7 @@ const Navbar = () => {
   // function to Fetch Actual search results
   function handleSearchSubmit(event) {
     event.preventDefault();
+    setIsLoading(true);
 
     try {
       // call API or perform search here
@@ -76,6 +82,7 @@ const Navbar = () => {
 
           setSearchResults(res.data.items);
           setNextPage(res.data.nextpage);
+          setIsLoading(false);
         });
     } catch (error) {
       console.log({ error });
@@ -260,6 +267,9 @@ const Navbar = () => {
       {showModal && (
         <VideoModal showModal={showModal} setShowModal={setShowModal} videoUrl={videoUrl} />
       )}
+
+       {/* Loader modal component */}
+       {isLoading && <LoaderModal />} {/* render the Loader component in a modal */}
     </>
   );
 };
