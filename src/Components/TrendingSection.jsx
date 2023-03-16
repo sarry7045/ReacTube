@@ -99,18 +99,20 @@ const TrendingSection = () => {
   }
 
   return (
-    <>
+    < >
 
+      <div className="bg-gray-800">
+    
       {/* Main Component  */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.9 }}
-        className="container mx-auto my-1"
+        className="container mx-auto bg-gray-800 text-white dark w-full"
       >
-        <h1 className="text-3xl font-bold text-gray-800 py-4 px-4">
+        <h1 className="text-3xl font-bold py-4 px-4">
           Trendings in{" "}
-          <select value={region} onChange={handleRegionChange} className="w-40 rounded-lg border bg-white">
+          <select value={region} onChange={handleRegionChange} className="w-40 rounded-lg border bg-white bg-opacity-10">
             {countries.map((country) => (
               <option key={country.code} value={country.code}>
                 {country.name}
@@ -128,7 +130,7 @@ const TrendingSection = () => {
               <>
                 <Zoom>
                   <div
-                    className="w-full bg-white rounded-lg border-2 border-gray-300 shadow-md"
+                    className="w-full rounded-lg border-2 border-gray-600 shadow-md"
                     key={`val-${index}`}
                   >
                     <a
@@ -148,34 +150,34 @@ const TrendingSection = () => {
                     <div className="px-6 py-1">
                       <a
                         // href={"https://youtube.com" + val.ID}
-                        className="font-medium mb-2 cursor-pointer title"
+                        className="font-semibold mb-2 cursor-pointer title text-sm"
                         onClick={() => { handleVideoClick(videoUrl) }}
                       >
                         #{index + 1} - {val.title}
                       </a>
 
-                      <div className="flex items-center mb-2">
+                      <div className="flex items-center mb-1">
                         <a href={"https://youtube.com" + val.uploaderUrl}>
                           {" "}
                           <img
-                            className="w-10 h-10 rounded-full mr-4"
+                            className="w-8 h-8 rounded-full mr-4 "
                             src={val.uploaderAvatar}
                             alt="C"
                           />
                         </a>
-                        <div className="text-sm">
+                        <div className="text-sm ml-2">
                           <a
                             href={"https://youtube.com" + val.uploaderUrl}
-                            className="text-gray-900 font-semibold leading-none"
+                            className="leading-none text-sm"
                           >
                             {val.uploaderName}
                           </a>
                           <div className="flex justify-between items-center mb-2">
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-gray-400 text-sm">
                               {formatNumber(val.views)}{" "}
                             </p>{" "}
                             &nbsp; &#183; &nbsp;
-                            <p className="text-gray-600 text-sm">
+                            <p className="text-gray-400 text-sm">
                               {handleUploadTimeFormat(val.uploadedDate)}
                             </p>
                           </div>
@@ -198,7 +200,10 @@ const TrendingSection = () => {
       )}
       {/* Loader modal component */}
       {isLoading && <LoaderModal />} {/* render the Loader component in a modal */}
+
+      </div>
     </>
+
   );
 };
 

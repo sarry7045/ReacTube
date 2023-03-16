@@ -5,7 +5,6 @@ import "../App.css";
 import VideoModal from "./VideoModal.jsx";
 import LoaderModal from "./LoaderModal";
 
-// import Modaal from "./Modaal";
 
 // https://watchapi.whatever.social/search?q=atifaslam&filter=music_songs
 
@@ -182,11 +181,11 @@ const Navbar = () => {
               <div className="fixed z-50 inset-0 overflow-y-auto">
                 <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                   <div className="fixed inset-0 transition-opacity">
-                    <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                    <div className="absolute inset-0 bg-gray-500 opacity-75 dark:bg-gray-900 dark:opacity-50"></div>
                   </div>
-                  <div className="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle sm:max-w-lg max-w-3xl">
+                  <div className="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-2xl sm:align-middle sm:max-w-lg max-w-3xl">
                     <button
-                      className="absolute top-0 right-0 m-4 font-bold text-xl"
+                      className="absolute top-0 right-0 m-4 font-bold text-xl text-gray-500 hover:text-gray-200 dark:text-gray-200 dark:hover:text-gray-500"
                       onClick={() => {
                         setSearchResults([]);
                         setCurrentPage(1);
@@ -194,7 +193,7 @@ const Navbar = () => {
                     >
                       X
                     </button>
-                    <h2 className="text-2xl font-bold mb-4">Search Results</h2>
+                    <h2 className="text-2xl font-bold mb-4 text-black dark:text-white">Search Results</h2>
                     <ul className="max-h-60vh overflow-y-auto">
                       {searchResults.map((result, index) => {
 
@@ -218,12 +217,12 @@ const Navbar = () => {
                                 <a
                                   title="Title"
                                   rel="noreferrer"
-                                  className="title cursor-pointer text-base font-semibold text-blue-600 hover:underline text-black !important"
+                                  className="title cursor-pointer text-base font-semibold text-blue-600 hover:underline text-black dark:text-white hover:text-purple-400 !important"
                                   onClick={() => { handleVideoClick(videoUrl) }}
                                 >
                                   {result.title}
                                 </a>
-                                <div className="flex items-center space-x-2 mt-1 text-xs">
+                                <div className="flex items-center space-x-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
                                   <div className="flex-shrink-0 w-6 h-6">
                                     <img
                                       src={result.uploaderAvatar}
@@ -231,12 +230,12 @@ const Navbar = () => {
                                       className="w-full h-auto object-cover rounded-full cursor-pointer"
                                     />
                                   </div>
-                                  <span className="text-gray-500">{result.uploaderName}</span>
+                                  <span>{result.uploaderName}</span>
                                 </div>
                               </div>
                             </div>
 
-                            <hr className="my-2 border-gray-300" />
+                            <hr className="my-2 border-gray-300 dark:border-gray-600" />
                           </li>
 
 
@@ -244,7 +243,7 @@ const Navbar = () => {
                       })}
                     </ul>
                     <button
-                      className="w-full py-2 text-white bg-purple-500 rounded mt-4 hover:bg-purple-700"
+                      className="w-full py-2 text-white bg-purple-500 rounded mt-4 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-800"
                       onClick={handleLoadMore}
                     >
                       Load More
@@ -253,12 +252,7 @@ const Navbar = () => {
                 </div>
               </div>
             )}
-            {/* {searchResults?.length > 0 ? (
-              <Modaal
-                searchResults={searchResults}
-                setSearchResults={setSearchResults}
-              />
-            ) : null} */}
+
           </div>
         </div>
       </motion.nav>
@@ -268,8 +262,8 @@ const Navbar = () => {
         <VideoModal showModal={showModal} setShowModal={setShowModal} videoUrl={videoUrl} />
       )}
 
-       {/* Loader modal component */}
-       {isLoading && <LoaderModal />} {/* render the Loader component in a modal */}
+      {/* Loader modal component */}
+      {isLoading && <LoaderModal />} {/* render the Loader component in a modal */}
     </>
   );
 };
